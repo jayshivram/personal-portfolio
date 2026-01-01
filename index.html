@@ -1344,27 +1344,23 @@
         // Set current year in footer
         document.getElementById('currentYear').textContent = new Date().getFullYear();
         
-        // Download CV button
-        document.getElementById('downloadCv').addEventListener('click', function(e) {
-            e.preventDefault();
-            
-            // Replace this URL with your Google Drive PDF link when ready
-            const pdfUrl = 'https://drive.google.com/file/d/1Wx8c5dxhAMGEiNvW3EHBOOohHQ91luXN/view?usp=sharing';
-            
-            if (pdfUrl === 'YOUR_GOOGLE_DRIVE_PDF_LINK_HERE') {
-                showToast('Please update the PDF link in the code', 'error');
-                return;
-            }
-            
-            const a = document.createElement('a');
-            a.href = pdfUrl;
-            a.download = 'Jay Shivram CV.pdf';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            
-            showToast('Downloading CV...', 'success');
-        });
+         // Download CV button - MODIFIED SECTION
+    document.getElementById('downloadCv').addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        // Changed from Google Drive URL to local file path
+        const pdfUrl = 'Jay Shivram CV.pdf'; // Updated to local file
+        
+        // Create a temporary link element for downloading
+        const a = document.createElement('a');
+        a.href = pdfUrl;
+        a.download = 'Jay Shivram CV.pdf';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        
+        showToast('Downloading CV...', 'success');
+    });
         
         // Contact form submission
         const contactForm = document.getElementById('contactForm');
