@@ -688,6 +688,26 @@
             animation: slideUp 0.6s ease-out;
         }
 
+        /* Form Button Container */
+        .form-buttons {
+            display: flex;
+            gap: 16px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        /* WhatsApp button */
+        .btn-whatsapp {
+            background: #25D366;
+            color: white;
+            box-shadow: var(--elevation-2);
+        }
+
+        .btn-whatsapp:hover {
+            background: #1da851;
+            box-shadow: var(--elevation-3);
+        }
+
         /* Responsive */
         @media (max-width: 992px) {
             :root {
@@ -707,6 +727,10 @@
             
             .hero-image {
                 display: none;
+            }
+            
+            .form-buttons {
+                flex-direction: column;
             }
         }
 
@@ -758,6 +782,11 @@
                 left: -20px;
                 width: 14px;
                 height: 14px;
+            }
+            
+            .form-buttons .btn {
+                width: 100%;
+                justify-content: center;
             }
         }
 
@@ -1189,30 +1218,27 @@
                         <label for="message">Your Message</label>
                         <textarea id="message" required></textarea>
                     </div>
-                    <button type="submit" class="btn btn-primary">
-                        <span class="material-icons-round">send</span>
-                        Send Message
-                    </button>
+                    <div class="form-buttons">
+                        <button type="button" class="btn btn-primary" id="sendEmailBtn">
+                            <span class="material-icons-round">email</span>
+                            Send via Email
+                        </button>
+                        <button type="button" class="btn btn-whatsapp" id="sendWhatsAppBtn">
+                            <span class="material-icons-round">chat</span>
+                            Send via WhatsApp
+                        </button>
+                    </div>
                 </form>
             </div>
             
             <div style="text-align: center; margin-top: 60px;" class="animate-slide-up" style="animation-delay: 0.2s">
-                <h3 style="margin-bottom: 20px;">Direct Contact</h3>
+                <h3 style="margin-bottom: 20px;">Download CV</h3>
                 <div class="contact-info" style="display: flex; justify-content: center; gap: 30px; flex-wrap: wrap;">
+                   
+                    
+                    
                     <div>
-                        <div style="font-size: 0.875rem; color: var(--on-surface-variant); margin-bottom: 8px;">Email</div>
-                        <div style="font-weight: 500;">jayshivram4@gmail.com</div>
-                    </div>
-                    <div>
-                        <div style="font-size: 0.875rem; color: var(--on-surface-variant); margin-bottom: 8px;">Phone</div>
-                        <div style="font-weight: 500;">+255 787 165 531</div>
-                    </div>
-                    <div>
-                        <div style="font-size: 0.875rem; color: var(--on-surface-variant); margin-bottom: 8px;">Location</div>
-                        <div style="font-weight: 500;">Dar es Salaam, Tanzania</div>
-                    </div>
-                    <div>
-                        <div style="font-size: 0.875rem; color: var(--on-surface-variant); margin-bottom: 8px;">Download CV</div>
+                        <div style="font-size: 0.875rem; color: var(--on-surface-variant); margin-bottom: 8px;"></div>
                         <a href="#" class="btn btn-outline" id="downloadCv" style="padding: 8px 16px; font-size: 0.875rem;">
                             <span class="material-icons-round">download</span>
                             PDF Format
@@ -1344,26 +1370,25 @@
         // Set current year in footer
         document.getElementById('currentYear').textContent = new Date().getFullYear();
         
-         // Download CV button - MODIFIED SECTION
-    document.getElementById('downloadCv').addEventListener('click', function(e) {
-        e.preventDefault();
+        // Download CV button - MODIFIED SECTION
+        document.getElementById('downloadCv').addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            // Changed from Google Drive URL to local file path
+            const pdfUrl = 'Jay Shivram CV.pdf'; // Updated to local file
+            
+            // Create a temporary link element for downloading
+            const a = document.createElement('a');
+            a.href = pdfUrl;
+            a.download = 'Jay Shivram CV.pdf';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            
+            showToast('Downloading CV...', 'success');
+        });
         
-        // Changed from Google Drive URL to local file path
-        const pdfUrl = 'Jay Shivram CV.pdf'; // Updated to local file
-        
-        // Create a temporary link element for downloading
-        const a = document.createElement('a');
-        a.href = pdfUrl;
-        a.download = 'Jay Shivram CV.pdf';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        
-        showToast('Downloading CV...', 'success');
-    });
-        
-        // Contact form submission
-        const contactForm = document.getElementById('contactForm');
+        // Toast notification function
         const toast = document.getElementById('toast');
         
         function showToast(message, type = 'info') {
@@ -1375,21 +1400,60 @@
             }, 3000);
         }
         
-        contactForm.addEventListener('submit', function(e) {
-            e.preventDefault();
+        // Form validation function
+        function validateForm() {
+            const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const subject = document.getElementById('subject').value.trim();
+            const message = document.getElementById('message').value.trim();
             
-            // Get form values
-            const name = document.getElementById('name').value;
-            const email = document.getElementById('email').value;
-            const subject = document.getElementById('subject').value;
-            const message = document.getElementById('message').value;
+            if (!name || !email || !subject || !message) {
+                showToast('Please fill in all fields before sending.', 'error');
+                return false;
+            }
             
-            // Here you would normally send the form data to a server
-            // For this example, we'll just show a success message
-            showToast(`Thank you, ${name}! Your message has been sent. I'll get back to you soon.`, 'success');
+            // Basic email validation
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                showToast('Please enter a valid email address.', 'error');
+                return false;
+            }
             
-            // Reset form
-            contactForm.reset();
+            return { name, email, subject, message };
+        }
+        
+        // Send Email Button
+        document.getElementById('sendEmailBtn').addEventListener('click', function() {
+            const formData = validateForm();
+            if (!formData) return;
+            
+            const { name, email, subject, message } = formData;
+            const mailtoLink = `mailto:jayshivram4@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(
+                `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`
+            )}`;
+            
+            // Open email client
+            window.open(mailtoLink, '_blank');
+            
+            // Show success message
+            showToast('Email client opened with your message. Please send it to complete.', 'success');
+        });
+        
+        // Send WhatsApp Button
+        document.getElementById('sendWhatsAppBtn').addEventListener('click', function() {
+            const formData = validateForm();
+            if (!formData) return;
+            
+            const { name, email, subject, message } = formData;
+            const phoneNumber = '+255743851233';
+            const whatsappMessage = `*New Contact Form Submission*\n\n*Name:* ${name}\n*Email:* ${email}\n*Subject:* ${subject}\n\n*Message:*\n${message}`;
+            const whatsappLink = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(whatsappMessage)}`;
+            
+            // Open WhatsApp
+            window.open(whatsappLink, '_blank');
+            
+            // Show success message
+            showToast('Opening WhatsApp with your message...', 'success');
         });
         
         // Animation on scroll
@@ -1415,4 +1479,3 @@
     </script>
 </body>
 </html>
-                
