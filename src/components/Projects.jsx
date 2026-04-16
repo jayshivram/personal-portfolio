@@ -16,10 +16,13 @@ const PROJECTS = [
   {
     icon: 'web',
     name: 'Personal Portfolio / CV Website',
-    desc: 'This very site. Built from scratch with plain HTML, CSS, and JS, no frameworks. Figured the best way to learn was to just build something real.',
-    tag: 'HTML · CSS · JS',
-    href: 'https://github.com/jayshivram/personal-portfolio',
-    links: [{ icon: 'github', href: 'https://github.com/jayshivram/personal-portfolio' }],
+    desc: 'This very site. Built from scratch with React and Vite. Figured the best way to learn was to just build something real.',
+    tag: 'React · Vite',
+    href: 'https://jay-shivram.vercel.app/',
+    links: [
+      { icon: 'external', href: 'https://jay-shivram.vercel.app/' },
+      { icon: 'github', href: 'https://github.com/jayshivram/personal-portfolio' }
+    ],
   },
   {
     icon: 'calculate',
