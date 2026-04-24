@@ -25,8 +25,14 @@ function Root() {
   useEffect(() => {
     if (theme === 'dark') {
       document.body.setAttribute('data-theme', 'dark')
+      document.getElementById('favicon-ico')?.setAttribute('href', '/favicon-dark.ico')
+      document.getElementById('favicon-16')?.setAttribute('href', '/favicon-dark-16x16.png')
+      document.getElementById('favicon-32')?.setAttribute('href', '/favicon-dark-32x32.png')
     } else {
       document.body.removeAttribute('data-theme')
+      document.getElementById('favicon-ico')?.setAttribute('href', '/favicon-light.ico')
+      document.getElementById('favicon-16')?.setAttribute('href', '/favicon-light-16x16.png')
+      document.getElementById('favicon-32')?.setAttribute('href', '/favicon-light-32x32.png')
     }
     localStorage.setItem('theme', theme)
   }, [theme])
